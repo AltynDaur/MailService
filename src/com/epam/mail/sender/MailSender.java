@@ -37,24 +37,22 @@ public class MailSender {
             // Set Subject: header field
             message.setSubject(arguments.getSubject());
 
-            BodyPart messageBodyPart = new MimeBodyPart();
-
-            messageBodyPart.setText(arguments.getMessage());
-            message.setContent(arguments.getMessage(), arguments.getContentType());
+            MimeBodyPart body = new MimeBodyPart();
+            body.setContent(arguments.getMessage(), arguments.getContentType());
             message.saveChanges();
             // Create a multipar message
             Multipart multipart = new MimeMultipart("alternative");
 
             // Set text message part
-            multipart.addBodyPart(messageBodyPart);
+            multipart.addBodyPart(body);
 
             // Part two is attachment
-            messageBodyPart = new MimeBodyPart();
+            body = new MimeBodyPart();
             String filename = arguments.getAttachment();
             DataSource source = new FileDataSource(filename);
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(filename);
-            multipart.addBodyPart(messageBodyPart);
+            body.setDataHandler(new DataHandler(source));
+            body.setFileName(filename);
+            multipart.addBodyPart(body);
 
             // Send the complete message parts
             message.setContent(multipart);
