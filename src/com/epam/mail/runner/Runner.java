@@ -12,8 +12,6 @@ import java.util.Map;
  */
 public class Runner {
 
-    private static Logger LOGGER = Logger.getLogger(Runner.class);
-
     public static void main(String[] args) {
         Arguments arguments = ArgumentParser.parse(args);
         MailSender.sendEmail(arguments);

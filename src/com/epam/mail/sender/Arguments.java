@@ -32,7 +32,7 @@ public class Arguments {
     @Option(name = "-a", usage = "Attachment")
     private String attachment;
 
-    @Option(name = "-smtp", usage = "SMTP server")
+    @Option(name = "-smtp", usage = "SMTP server", required = true)
     private String server;
 
     public String getFromAddress() {
