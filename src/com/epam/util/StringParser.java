@@ -31,6 +31,11 @@ public class StringParser {
             return stringLine;
     }
 
+    public static String getFileNameFromPath(String filePath){
+        String[] pathParts = filePath.split("\\\\");
+        return pathParts[pathParts.length - 1];
+    }
+
     public static BufferedReader getReader(String filePath) throws IOException
     {
         return new BufferedReader(new InputStreamReader(new FileInputStream(filePath), Charset.forName("UTF-8")));

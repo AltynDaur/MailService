@@ -1,5 +1,6 @@
 package com.epam.mail.sender;
 
+import com.epam.util.StringParser;
 import org.apache.log4j.Logger;
 
 import javax.activation.DataHandler;
@@ -58,11 +59,12 @@ public class MailSender {
             // Part two is attachment
             body = new MimeBodyPart();
             if (arguments.getAttachment() != null) {
-                String filename = arguments.getAttachment();
-                LOGGER.info("Setting attachment file: " + arguments.getAttachment());
-                DataSource source = new FileDataSource(filename);
+                String filepath = arguments.getAttachment();
+                String fileName = StringParser.getFileNameFromPath(filepath);
+                LOGGER.info("Setting attachment file: " + fileName);
+                DataSource source = new FileDataSource(filepath);
                 body.setDataHandler(new DataHandler(source));
-                body.setFileName(filename);
+                body.setFileName(fileName);
                 multipart.addBodyPart(body);
             }
             // Send the complete message parts
