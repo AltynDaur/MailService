@@ -46,19 +46,20 @@ public class MailSender {
                 message.setSubject(arguments.getSubject());
                 LOGGER.info("Setting subject: " + arguments.getArgumentsMap().get("subject"));
             }
-            MimeBodyPart body = new MimeBodyPart();
-            if (arguments.getMessage() != null) {
-                body.setContent(arguments.getMessage(), arguments.getContentType());
-                LOGGER.info("Setting content-type: " + arguments.getContentType());
-                message.saveChanges();
-            }
-            // Create a multipar message
-            Multipart multipart = new MimeMultipart("alternative");
-            // Set text message part
-            multipart.addBodyPart(body);
-            // Part two is attachment
-            body = new MimeBodyPart();
+
+            String contentType = arguments.getContentType() == null ? "text/plain" : arguments.getContentType();
+
             if (arguments.getAttachment() != null) {
+                MimeBodyPart body = new MimeBodyPart();
+                body.setContent(arguments.getMessage(), contentType);
+                LOGGER.info("Setting content-type: " + contentType);
+                message.saveChanges();
+                // Create a multipar message
+                Multipart multipart = new MimeMultipart("alternative");
+                // Set text message part
+                multipart.addBodyPart(body);
+                // Part two is attachment
+                body = new MimeBodyPart();
                 String filepath = arguments.getAttachment();
                 String fileName = StringParser.getFileNameFromPath(filepath);
                 LOGGER.info("Setting attachment file: " + fileName);
@@ -66,15 +67,16 @@ public class MailSender {
                 body.setDataHandler(new DataHandler(source));
                 body.setFileName(fileName);
                 multipart.addBodyPart(body);
+                // Send the complete message parts
+                message.setContent(multipart);
+            } else {
+                message.setContent(arguments.getMessage(), contentType);
             }
-            // Send the complete message parts
-            message.setContent(multipart);
-
             // Send message
             Transport.send(message);
-            System.out.println("Sent message successfully....");
+            LOGGER.info("Sent message successfully....");
         } catch (MessagingException mex) {
-            mex.printStackTrace();
+            LOGGER.error(mex.getMessage());
         }
     }
 }

@@ -23,7 +23,7 @@ public class Arguments {
     @Option(name = "-s", usage = "Email subject")
     private String subject;
 
-    @Option(name = "-m", usage = "Email message")
+    @Option(name = "-m", usage = "Email message", required = true)
     private String message;
 
     @Option(name = "-mct", usage = "Message content type")
@@ -48,6 +48,9 @@ public class Arguments {
     }
 
     public String getSubject() {
+        if(subject == null){
+            return null;
+        }
         return StringParser.getString(subject);
     }
 
